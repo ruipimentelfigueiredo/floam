@@ -46,8 +46,8 @@ void velodyneEdgeHandler(const sensor_msgs::PointCloud2ConstPtr &laserCloudMsg)
     mutex_lock.unlock();
 }
 
-bool is_odom_inited = false;
-double total_time =0;
+bool is_odom_inited=false;
+double total_time=0;
 int total_frame=0;
 void odom_estimation(){
     while(1){
@@ -107,12 +107,12 @@ void odom_estimation(){
             transform.setOrigin( tf::Vector3(t_current.x(), t_current.y(), t_current.z()) );
             tf::Quaternion q(q_current.x(),q_current.y(),q_current.z(),q_current.w());
             transform.setRotation(q);
-            br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "map", pointcloud_frame_id));
+            br.sendTransform(tf::StampedTransform(transform, ros::Time(0), "map", pointcloud_frame_id+"_slam"));
 
             // publish odometry
             nav_msgs::Odometry laserOdometry;
             laserOdometry.header.frame_id = "map";
-            laserOdometry.child_frame_id = pointcloud_frame_id;
+            laserOdometry.child_frame_id = pointcloud_frame_id+"_slam";
             laserOdometry.header.stamp = pointcloud_time;
             laserOdometry.pose.pose.orientation.x = q_current.x();
             laserOdometry.pose.pose.orientation.y = q_current.y();

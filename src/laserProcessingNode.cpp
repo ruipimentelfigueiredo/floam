@@ -50,7 +50,7 @@ void velodyneHandler(const sensor_msgs::PointCloud2ConstPtr &laserCloudMsg)
 
 double total_time =0;
 int total_frame=0;
-std::string base_frame_id="base_link";
+std::string processing_frame_id="base_link";
 Eigen::Affine3d sensor_base_trans;
 
 double first=true;
@@ -76,8 +76,8 @@ void laser_processing(){
                 tf::StampedTransform sensor_base_tf;
                 try{
                     ros::Time now = ros::Time::now();
-                    listener.waitForTransform(base_frame_id, pointcloud_in->header.frame_id, now, ros::Duration(3.0));
-                    listener.lookupTransform(base_frame_id, pointcloud_in->header.frame_id, ros::Time(0), sensor_base_tf);
+                    listener.waitForTransform(processing_frame_id, pointcloud_in->header.frame_id, now, ros::Duration(3.0));
+                    listener.lookupTransform(processing_frame_id, pointcloud_in->header.frame_id, ros::Time(0), sensor_base_tf);
                 }
                 catch (tf::TransformException &ex) {
                     ROS_ERROR("%s",ex.what());
@@ -88,9 +88,9 @@ void laser_processing(){
             }
 
             pcl::transformPointCloud(*pointcloud_in, *pointcloud_in,sensor_base_trans.cast <float> ());
-            pointcloud_in->header.frame_id=base_frame_id;
+            pointcloud_in->header.frame_id = processing_frame_id;
             ros::Time pointcloud_time = (pointCloudBuf.front())->header.stamp;
-            std::string pointcloud_frame_id = base_frame_id;
+            std::string pointcloud_frame_id = processing_frame_id;
             pointCloudBuf.pop();
             mutex_lock.unlock();
 
@@ -152,6 +152,7 @@ int main(int argc, char **argv)
     nh.getParam("/max_dis", max_dis);
     nh.getParam("/min_dis", min_dis);
     nh.getParam("/scan_line", scan_line);
+    nh.getParam("/processing_frame_id", processing_frame_id);
 
     lidar_param.setScanPeriod(scan_period);
     lidar_param.setVerticalAngle(vertical_angle);
