@@ -62,7 +62,7 @@ void laser_mapping(){
                 continue;              
             }
 
-            if(!odometryBuf.empty() && odometryBuf.front()->header.stamp.toSec() < pointCloudBuf.front()->header.stamp.toSec()-0.5*lidar_param.scan_period){
+            if(!odometryBuf.empty() && fabs(odometryBuf.front()->header.stamp.toSec() - pointCloudBuf.front()->header.stamp.toSec())> 0.5*lidar_param.scan_period){
                 odometryBuf.pop();
                 ROS_INFO("time stamp unaligned with path final, pls check your data --> laser mapping node");
                 mutex_lock.unlock();

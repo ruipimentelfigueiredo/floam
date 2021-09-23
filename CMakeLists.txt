@@ -15,6 +15,8 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   tf
   eigen_conversions
+  pcl_ros
+  tf_conversions
 )
 
 find_package(Eigen3)
