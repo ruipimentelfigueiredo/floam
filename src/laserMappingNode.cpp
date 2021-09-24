@@ -118,6 +118,13 @@ int main(int argc, char **argv)
     nh.getParam("/scan_line", scan_line);
     nh.getParam("/map_resolution", map_resolution);
 
+    ROS_INFO_STREAM("scan_period: "    << scan_period);
+    ROS_INFO_STREAM("vertical_angle: " << vertical_angle);
+    ROS_INFO_STREAM("max_dis: "        << max_dis);
+    ROS_INFO_STREAM("min_dis: "        << min_dis);
+    ROS_INFO_STREAM("scan_line: "      << scan_line);
+    ROS_INFO_STREAM("map_resolution: " << map_resolution);
+
     lidar_param.setScanPeriod(scan_period);
     lidar_param.setVerticalAngle(vertical_angle);
     lidar_param.setLines(scan_line);
