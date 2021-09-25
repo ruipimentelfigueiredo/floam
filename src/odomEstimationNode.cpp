@@ -97,7 +97,6 @@ void odom_estimation(){
             }
 
 
-
             Eigen::Quaterniond q_current(odomEstimation.odom.rotation());
             //q_current.normalize();
             Eigen::Vector3d t_current = odomEstimation.odom.translation();
@@ -107,7 +106,8 @@ void odom_estimation(){
             transform.setOrigin( tf::Vector3(t_current.x(), t_current.y(), t_current.z()) );
             tf::Quaternion q(q_current.x(),q_current.y(),q_current.z(),q_current.w());
             transform.setRotation(q);
-            br.sendTransform(tf::StampedTransform(transform, ros::Time(0), "map", pointcloud_frame_id+"_slam"));
+            //br.sendTransform(tf::StampedTransform(transform, ros::Time(0), "map", pointcloud_frame_id+"_slam"));
+            br.sendTransform(tf::StampedTransform(transform, pointcloud_time, "map", pointcloud_frame_id+"_slam"));
 
             // publish odometry
             nav_msgs::Odometry laserOdometry;
